@@ -3,16 +3,18 @@ from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from django.template import RequestContext
-from guardian.decorators import permission_required_or_403
+from guardian.decorators import permission_required, permission_required_or_403
+from guardian.mixins import PermissionListMixin
 
 from .models import Post
 
 User = get_user_model()
 
 
-class PostList(ListView):
+class PostList(PermissionListMixin, ListView):
     model = Post
     context_object_name = 'posts'
+    permission_required = ['view_post']
 
 post_list = PostList.as_view()
 
